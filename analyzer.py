@@ -1,11 +1,19 @@
 from groq import Groq
 import os
 import json
+import streamlit as st
 from dotenv import load_dotenv
 
 load_dotenv()
 
-client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+def _get_secret(key: str) -> str:
+    """Get secret from Streamlit secrets (cloud) or .env (local)."""
+    try:
+        return st.secrets[key]
+    except Exception:
+        return os.getenv(key)
+
+client = Groq(api_key=_get_secret("GROQ_API_KEY"))
 
 def generate_market_report(products: list[dict], market_summary: dict) -> str:
     """

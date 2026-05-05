@@ -1,11 +1,19 @@
 import requests
 from bs4 import BeautifulSoup
 import os
+import streamlit as st
 from dotenv import load_dotenv
 
 load_dotenv()
 
-SCRAPERAPI_KEY = os.getenv("SCRAPERAPI_KEY")
+def _get_secret(key: str) -> str:
+    """Get secret from Streamlit secrets (cloud) or .env (local)."""
+    try:
+        return st.secrets[key]
+    except Exception:
+        return os.getenv(key)
+
+SCRAPERAPI_KEY = _get_secret("SCRAPERAPI_KEY")
 
 def get_bestsellers(amazon_url: str) -> list[dict]:
     """
