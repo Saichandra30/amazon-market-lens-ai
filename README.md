@@ -1,138 +1,103 @@
-<![CDATA[<div align="center">
+# amazon-market-lens-ai
 
-# 📦 Amazon Market Lens AI
+> Paste any Amazon Best Sellers URL and get estimated monthly revenue for the market and top 10 products.
 
-![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![Streamlit](https://img.shields.io/badge/Streamlit-1.57-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
-![Groq](https://img.shields.io/badge/Groq-LLaMA_3.3_70B-F55036?style=for-the-badge&logo=meta&logoColor=white)
-![BeautifulSoup](https://img.shields.io/badge/BeautifulSoup-4-43B02A?style=for-the-badge&logo=python&logoColor=white)
-![Plotly](https://img.shields.io/badge/Plotly-Interactive_Charts-3F4F75?style=for-the-badge&logo=plotly&logoColor=white)
-![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)
-
-**Paste any Amazon Best Sellers URL → get estimated monthly revenue for the market & top 10 products**
-
-*Built for the [Pixii.ai](https://pixii.ai) Founding Engineer take-home project*
+![Python](https://img.shields.io/badge/Python-3.11+-blue?style=flat-square)
+![Streamlit](https://img.shields.io/badge/Streamlit-1.57-red?style=flat-square)
+![Groq](https://img.shields.io/badge/Groq-LLaMA_3.3_70B-orange?style=flat-square)
+![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
 
 ---
 
-[Features](#-features) · [How It Works](#-how-it-works) · [Setup](#-local-setup) · [Deploy](#-deploy-to-streamlit-cloud) · [APIs Used](#-apis--tools-used)
+## Overview
 
-</div>
-
----
-
-## ✨ Features
-
-| Feature | Description |
-|---------|-------------|
-| 🔗 **Any Amazon URL** | Paste any Best Sellers URL — supports `amazon.in`, `amazon.com`, and other domains |
-| 🕷️ **Smart Scraping** | Extracts top 10 products with price, rating, reviews, and ASIN using BeautifulSoup |
-| 📊 **Revenue Estimation** | Estimates monthly units and revenue per product using review velocity heuristics |
-| 🏪 **Market Sizing** | Estimates total addressable market using the top-10 = 40% heuristic |
-| 📈 **Interactive Charts** | Plotly bar chart showing revenue distribution by rank |
-| 🤖 **AI Analysis** | Groq-powered LLaMA 3.3 70B generates a data-driven market research report |
-| 💾 **CSV Export** | One-click download of the full analysis as CSV |
-| ⚡ **Fast** | End-to-end analysis in under 30 seconds |
+`amazon-market-lens-ai` is a Streamlit web app that scrapes any Amazon Best Sellers page, estimates monthly sales and revenue for the top 10 products using a review velocity heuristic, sizes the total addressable market, and generates an AI-powered market analysis report.
 
 ---
 
-## 📸 Screenshots
+## Features
 
-<div align="center">
-
-> 🖼️ *Add screenshots of the app here after deployment*
->
-> Recommended: Hero screenshot showing metric cards + data table + chart + AI report
-
-</div>
+- Scrapes any Amazon Best Sellers URL (`amazon.in`, `amazon.com`, and other domains)
+- Extracts title, price, rating, review count, and ASIN for top 10 products
+- Estimates monthly units and revenue per product
+- Estimates total category market size
+- Interactive Plotly bar chart of revenue by rank
+- AI market analysis report via Groq (LLaMA 3.3 70B)
+- One-click CSV export
 
 ---
 
-## 🗂️ Project Structure
+## Project Structure
 
 ```
 amazon-market-lens-ai/
-├── app.py              # 🎯 Streamlit UI — metric cards, table, chart, AI report
-├── scraper.py          # 🕷️ BeautifulSoup scraping logic for Amazon Best Sellers
-├── estimator.py        # 📊 Revenue estimation engine (review velocity heuristic)
-├── analyzer.py         # 🤖 Groq API integration (LLaMA 3.3 70B market report)
-├── requirements.txt    # 📦 Python dependencies
-├── .env                # 🔑 API keys (not committed)
-└── README.md           # 📝 You are here
+├── app.py              # Streamlit UI
+├── scraper.py          # BeautifulSoup scraping logic
+├── estimator.py        # Revenue estimation engine
+├── analyzer.py         # Groq API integration
+├── requirements.txt    # Python dependencies
+├── .gitignore
+├── .env                # API keys — not committed
+└── README.md
 ```
 
 ---
 
-## 🧠 How It Works
+## Tech Stack
 
-### Revenue Estimation Methodology
-
-The estimator uses a **review velocity heuristic** — a widely-used e-commerce intelligence technique:
-
-```
-Monthly Units = (Reviews × 0.02) × Rank Multiplier × Rating Multiplier
-Monthly Revenue = Monthly Units × Price
-```
-
-| Factor | Formula | Rationale |
-|--------|---------|-----------|
-| **Base Units** | `max(review_count × 0.02, 10)` | ~1 review per 50–100 sales is the industry rule of thumb |
-| **Rank Multiplier** | `max(1.5 - (rank × 0.08), 0.3)` | Rank #1 sells ~10× more than Rank #10 |
-| **Rating Multiplier** | `rating / 5.0` | Higher-rated products convert better |
-
-### Market Sizing
-
-```
-Total Market Size = Top 10 Revenue ÷ 0.40
-```
-
-> 💡 **Why 40%?** In most Amazon categories, the top 10 best sellers account for approximately 30–50% of total category revenue. We use 40% as a balanced estimate.
-
-### AI Analysis
-
-The enriched product data and market estimates are sent to **Groq's LLaMA 3.3 70B** model, which generates a concise report covering:
-
-1. 📍 Market opportunity summary
-2. 📈 Key trends (pricing, ratings, review patterns)
-3. 👑 Who's dominating and why
-4. 🔍 Whitespace / gaps for new sellers
-5. ⚠️ Risk factors
+| Layer       | Tool                          |
+|-------------|-------------------------------|
+| UI          | Streamlit                     |
+| Scraping    | BeautifulSoup4 + Requests     |
+| Estimation  | Review velocity heuristic     |
+| AI Report   | Groq API — LLaMA 3.3 70B      |
+| Charts      | Plotly                        |
+| Data        | Pandas                        |
 
 ---
 
-## 🚀 Local Setup
+## Revenue Estimation Methodology
 
-### Prerequisites
+Uses a **review velocity heuristic** — a standard e-commerce market intelligence technique.
 
+```
+Base Units        = max(review_count × 0.02, 10)
+Rank Multiplier   = max(1.5 − (rank × 0.08), 0.3)
+Rating Multiplier = rating / 5.0
+
+Monthly Units     = Base Units × Rank Multiplier × Rating Multiplier
+Monthly Revenue   = Monthly Units × Price
+Market Size       = Top 10 Revenue / 0.40
+```
+
+**Why 0.40?**
+In most Amazon categories, the top 10 best sellers account for ~40% of total category revenue. Dividing by 0.40 scales up to the estimated total addressable market.
+
+---
+
+## Local Setup
+
+**Prerequisites**
 - Python 3.11+
-- A free [Groq API key](https://console.groq.com/)
+- Groq API key — free at [console.groq.com](https://console.groq.com)
 
-### Step 1 — Clone the repo
+**Installation**
 
 ```bash
+# Clone
 git clone https://github.com/Saichandra30/amazon-market-lens-ai.git
 cd amazon-market-lens-ai
-```
 
-### Step 2 — Create virtual environment
-
-```bash
+# Virtual environment
 python -m venv venv
+source venv/bin/activate        # Mac/Linux
+venv\Scripts\activate           # Windows
 
-# Windows
-venv\Scripts\activate
-
-# Mac / Linux
-source venv/bin/activate
-```
-
-### Step 3 — Install dependencies
-
-```bash
+# Install dependencies
 pip install -r requirements.txt
 ```
 
-### Step 4 — Set up environment variables
+**Environment variables**
 
 Create a `.env` file in the project root:
 
@@ -140,87 +105,84 @@ Create a `.env` file in the project root:
 GROQ_API_KEY=your_groq_api_key_here
 ```
 
-### Step 5 — Run the app
+**Run**
 
 ```bash
 streamlit run app.py
 ```
 
-The app will open at [http://localhost:8501](http://localhost:8501) 🎉
+App runs at `http://localhost:8501`
 
 ---
 
-## ☁️ Deploy to Streamlit Cloud
+## Deployment
 
-1. Push your code to GitHub (make sure `.env` is in `.gitignore`)
+### Streamlit Cloud
+
+1. Push repo to GitHub — ensure `.env` is in `.gitignore`
 2. Go to [share.streamlit.io](https://share.streamlit.io)
-3. Connect your GitHub repo
-4. Set the main file path to `app.py`
-5. Add your secrets in **Settings → Secrets**:
+3. Connect your GitHub repo, set main file to `app.py`
+4. Add secret under **Settings → Secrets**
 
 ```toml
 GROQ_API_KEY = "your_groq_api_key_here"
 ```
 
-6. Click **Deploy** 🚀
+5. Click **Deploy**
 
 ---
 
-## 🔌 APIs & Tools Used
+## Test URLs
 
-| Tool | Purpose | Cost |
-|------|---------|------|
-| **BeautifulSoup + Requests** | Scrapes Amazon Best Sellers pages directly | Free |
-| **Groq API** (LLaMA 3.3 70B) | Generates AI-powered market analysis report | Free tier available |
-| **Streamlit** | Web UI framework | Free |
-| **Plotly** | Interactive bar charts | Free |
-| **Pandas** | Data processing & CSV export | Free |
-
----
-
-## 🧪 Example URLs to Test
-
-Try these Amazon Best Sellers URLs:
-
-| Category | URL |
-|----------|-----|
-| 🇮🇳 Beauty (India) | `https://www.amazon.in/gp/bestsellers/beauty/` |
-| 🇮🇳 Laptops (India) | `https://www.amazon.in/gp/bestsellers/computers/1375424031/` |
-| 🇮🇳 Health (India) | `https://www.amazon.in/gp/bestsellers/hpc/` |
-| 🇺🇸 Electronics (US) | `https://www.amazon.com/Best-Sellers-Electronics/zgbs/electronics/` |
-| 🇺🇸 Books (US) | `https://www.amazon.com/best-sellers-books-Amazon/zgbs/books/` |
+| Category         | URL                                                                  |
+|------------------|----------------------------------------------------------------------|
+| Beauty (India)   | `https://www.amazon.in/gp/bestsellers/beauty/`                      |
+| Laptops (India)  | `https://www.amazon.in/gp/bestsellers/computers/`                   |
+| Health (India)   | `https://www.amazon.in/gp/bestsellers/hpc/`                         |
+| Electronics (US) | `https://www.amazon.com/Best-Sellers-Electronics/zgbs/electronics/` |
 
 ---
 
-## 🔮 What I'd Build Next
+## APIs Used
 
-- [ ] **Multi-category comparison** — analyze 2–3 categories side by side
-- [ ] **Historical tracking** — store snapshots and show trends over time
-- [ ] **ASIN deep-dive** — click any product to see detailed revenue trajectory
-- [ ] **Competitor mapping** — cluster sellers by brand and visualize market share
-- [ ] **Automated alerts** — notify when a new product enters the top 10
-- [ ] **PDF report export** — one-click downloadable investor-style report
-- [ ] **Multi-country support** — auto-detect currency from URL domain
-- [ ] **Proxy rotation** — add ScraperAPI integration for high-volume scraping
-- [ ] **Confidence intervals** — show estimation ranges instead of point estimates
+### 1. BeautifulSoup + Requests
+Scrapes Amazon Best Sellers pages directly with no paid API required. Auto-detects Amazon domain from the URL. Uses multiple CSS selector fallbacks to handle Amazon's varying page layouts.
 
----
-
-## 📄 License
-
-This project is licensed under the [MIT License](LICENSE).
+### 2. Groq API — LLaMA 3.3 70B
+Sends enriched product data and market estimates to LLaMA 3.3 70B via Groq's inference API. Returns a structured market report covering:
+- Market opportunity summary
+- Key trends across pricing, ratings, and reviews
+- Dominant brands and reasons for their success
+- Whitespace gaps for new entrants
+- Risk factors
 
 ---
 
-## 👤 Author
+## Known Limitations
 
-Built with ☕ and 🤖 for the **Pixii.ai Founding Engineer** take-home assessment.
+- Revenue estimates are approximations based on public review data, not actual sales figures
+- Amazon occasionally updates page HTML structure which may break CSS selectors
+- High-volume scraping without proxy rotation may trigger Amazon rate limits
 
 ---
 
-<div align="center">
+## Roadmap
 
-**⭐ Star this repo if you found it useful!**
+- [ ] Multi-category side-by-side comparison
+- [ ] Historical rank snapshots and trend tracking
+- [ ] PDF report export
+- [ ] Confidence intervals on revenue estimates
+- [ ] ScraperAPI integration for high-volume use
+- [ ] Auto-detect currency symbol from URL domain
 
-</div>
-]]>
+---
+
+## License
+
+MIT — see [LICENSE](LICENSE)
+
+---
+
+## Author
+
+[Saichandra](https://github.com/Saichandra30)
