@@ -13,7 +13,6 @@ def _get_secret(key: str) -> str:
     except Exception:
         return os.getenv(key)
 
-SCRAPERAPI_KEY = _get_secret("SCRAPERAPI_KEY")
 
 def get_bestsellers(amazon_url: str) -> list[dict]:
     """
@@ -23,7 +22,7 @@ def get_bestsellers(amazon_url: str) -> list[dict]:
     # ScraperAPI renders the page and bypasses Amazon's bot protection
     scraper_url = "https://api.scraperapi.com"
     params = {
-        "api_key":  SCRAPERAPI_KEY,
+        "api_key":  _get_secret("SCRAPERAPI_KEY"),
         "url":      amazon_url,
         "render":   "true",        # renders JavaScript
         "country_code": "in",      # amazon.in

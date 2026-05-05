@@ -6,19 +6,33 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-def _get_secret(key: str) -> str:
-    """Get secret from Streamlit secrets (cloud) or .env (local)."""
-    try:
-        return st.secrets[key]
-    except Exception:
-        return os.getenv(key)
 
-client = Groq(api_key=_get_secret("GROQ_API_KEY"))
+def _get_groq_client():
+    """Create Groq client with key from Streamlit secrets or .env."""
+    api_key = None
+
+    # Try Streamlit secrets first (cloud deployment)
+    try:
+        api_key = st.secrets["GROQ_API_KEY"]
+    except Exception:
+        pass
+
+    # Fallback to environment variable (local .env)
+    if not api_key:
+        api_key = os.getenv("GROQ_API_KEY")
+
+    if not api_key:
+        raise RuntimeError("GROQ_API_KEY not found. Set it in Streamlit secrets or .env file.")
+
+    return Groq(api_key=api_key)
+
 
 def generate_market_report(products: list[dict], market_summary: dict) -> str:
     """
     Ask Groq (LLaMA 3.3 70B) to write a smart market analysis report.
     """
+    client = _get_groq_client()
+
     prompt = f"""
 You are an Amazon India market research analyst.
 
